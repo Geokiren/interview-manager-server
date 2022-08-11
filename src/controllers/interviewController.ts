@@ -66,4 +66,17 @@ const getInterview = expressAsyncHandler(async (req: Request, res: Response) => 
   }
 });
 
-export { saveInterview, deleteInterview, getInterview };
+const getInterviews = expressAsyncHandler(async (req: Request, res: Response) => {
+  const { filters } = req.body;
+
+  const interviews = await Interview.find({ ...filters });
+
+  if (interviews) {
+    res.status(200).json(interviews);
+  } else {
+    res.status(400);
+    throw new Error('Could not find intreviews...');
+  }
+});
+
+export { saveInterview, deleteInterview, getInterview, getInterviews };
