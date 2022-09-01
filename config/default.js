@@ -1,5 +1,10 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+const path = require('path');
 const bunyan = require('bunyan');
+
+dotenv.config({
+  path: path.resolve(__dirname, `${process.env.NODE_ENV}.env`)
+});
 
 const loggers = {
   development: () => bunyan.createLogger({ name: "development", level: "debug" }),
@@ -7,26 +12,17 @@ const loggers = {
   test: () => bunyan.createLogger({ name: "test", level: "fatal" }),
 }
 
+const environment = process.env.NODE_ENV || 'development';
+const sitenameEnvironment = environment !== 'production' ? ` [${environment}]` : '';
+const logger = loggers[environment];
+
 module.exports = {
-  development: {
-    port: process.env.PORT,
-    sitename: 'Interview Manager [Development]',
-    log: loggers.development,
+  [environment]: {
+    environment,
+    port: process.env.PORT || 5000,
+    sitename: `Interview Manager${sitenameEnvironment}`,
+    log: logger,
     db_uri: process.env.MONGO_URI,
-    secret: process.env.JWT_SECRET,
-  },
-  production: {
-    port: process.env.PORT,
-    sitename: 'Interview Manager',
-    log: loggers.production,
-    db_uri: process.env.MONGO_URI,
-    secret: process.env.JWT_SECRET,
-  },
-  test: {
-    port: process.env.PORT,
-    sitename: 'Interview Manager [Test]',
-    log: loggers.test,
-    db_uri: process.env.MONGO_URI,
-    secret: process.env.JWT_SECRET,
-  },
+    secret: process.env.JWT_SECRET || 'kaloseinaikalos',
+  }
 };

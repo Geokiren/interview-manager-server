@@ -3,8 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import expressAsyncHandler from 'express-async-handler';
 import User from '../models/userModel';
-import { log } from '../currentConfig';
-import { secret } from '../currentConfig';
+import { log, secret } from '../currentConfig';
 
 interface JwtPayload {
   id: string
