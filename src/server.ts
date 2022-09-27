@@ -7,10 +7,12 @@ import compression from 'compression';
 import { port, log, environment } from './currentConfig';
 import clustersInit from './clustersInit';
 import helmet from 'helmet';
+import cors from 'cors';
 
 const server: Application = express();
 
 //* Init tools
+server.use(cors());
 server.use(json());
 server.use(urlencoded({ extended: true }));
 server.use(helmet());
